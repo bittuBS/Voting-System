@@ -1,11 +1,11 @@
 import React from 'react'
 
-const voterList = () => {
+const VoterList = () => {
   return (
     <div>
-      
+      hello
     </div>
   )
 }
 
-export default voterList
+export default VoterList

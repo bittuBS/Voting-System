@@ -9,7 +9,8 @@ body {
   background-image: linear-gradient(to right top ,#2d0036,#4f015b, #730283, #9a02ac,#c400d7);
   height: 100vh;
   width: 100vw;
-  /* overflow: hidden; */
+   /* overflow: hidden;  */
+   overflow-y:auto;
 }
 
 code {

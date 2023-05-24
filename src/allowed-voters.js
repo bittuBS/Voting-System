@@ -18,22 +18,26 @@ const [formInput, setFormInput]=useState({
 });
 //router
 
-const {uploadToIPFS}=useContext(VotingContext);
+const {uploadToIPFS,createVoter,voterArray,getAllVoterData}=useContext(VotingContext);
 //--------voters image drop
 const onDrop =useCallback(async(accFil)=>{
   const url =await uploadToIPFS(accFil[0]);
   setFileUrl(url);
 });
-const {getRootprops, getInputProps}=useDropzone({
+const {getRootProps, getInputProps}=useDropzone({
   onDrop,
   accept: "image/*",
   maxSize : 5000000,
 });
+console.log(fileUrl);
+useEffect(()=>{
+  getAllVoterData();
+},[]);
 //------jsx part
 
   return (
     <div className={Style.createVoter} >
-    <div>{!fileUrl && (
+    <div>{fileUrl && (
       <div className={Style.voterInfo}>
     <img src={fileUrl} alt='voter image'></img>
     <div className={Style.voterInfo_paragraph}>
@@ -48,21 +52,21 @@ const {getRootprops, getInputProps}=useDropzone({
         <div className={Style.sideInfo_box}>
           <h4>create candidate for voting</h4>
           <p>Blockchain voting organization , provide ethereum ecosystem</p>
-          <p className={Style.sideInfo_para}>contract candidate</p>
+          <p className={Style.sideInfo_para}>Contract Candidate List</p>
         </div>
-        <div className={Style.car}>
-          {/* {voterArray.map((el,i)=>(
+        <div className={Style.card}>
+           {voterArray.map((el,i)=>(
             <div key={i+1} className={Style.card_box}>
               <div className={Style.image}>
-              <img src='' alt='profile photo'></img>
+              <img src={el[4]} alt='profile photo'></img>
             </div>
             <div className={Style.card_info}>
-            <p>Name</p>
-            <p>Address</p>
-            <p>Details</p>
+            <p>Name:{el[1]}</p>
+            <p>Address:{el[3].slice(0,10)}...</p>
+            {/* <p>Details</p> */}
             </div>
             </div>
-          ))} */}
+          ))} 
         </div>
       </div>
     )} 
@@ -72,12 +76,15 @@ const {getRootprops, getInputProps}=useDropzone({
         <h1>Create New Voter</h1>
         <div className={Style.voter__container__box}>
           <div className={Style.voter__container__box__div}>
-            <div {...getInputProps()}>
+          
+            <div {...getRootProps()}>
               <input {...getInputProps()}/>
+              
               <div className={Style.voter__container__box__div__info}>
               <p> Upload file: JPG,PNG,GIF,WEBM max 10MB </p>
               <div className={Style.voter__container__box__div__image}>
-              <img src={images.creator} alt='file upload' width={150} height={150} objectFit="contain"/>
+              <img 
+              src={images.upload} alt='file upload' width={150} height={150} objectfit="contain"/>
               </div>
               <p>Drag & Drop file</p>
               <p>or Browse Media on you device</p>
@@ -92,7 +99,7 @@ const {getRootprops, getInputProps}=useDropzone({
       <Input  inputType="text" title="Address" placeholder=" Voter Address" handleClick={(e)=>setFormInput({...formInput,address:e.target.value})}/>
         <Input  inputType="text" title="Position" placeholder=" Voter Position" handleClick={(e)=>setFormInput({...formInput,position:e.target.value})}/>
 <div className={Style.Button}>
-  <Button btnName="Authorized voter" handleClick={()=>{}}/>
+  <Button btnName="Authorized voter" handleClick={()=>createVoter(formInput,fileUrl)}/>
 </div>
       </div>
     </div>

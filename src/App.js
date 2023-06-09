@@ -1,6 +1,7 @@
 import React, {useEffect, useContext } from 'react'
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
-import Main from "./main";
+import First from "./first";
+
 //internal import
 import AllowedVoters from './allowed-voters';
 import { VotingProvider } from "./Context/Voter"
@@ -18,7 +19,7 @@ return (
     <>
     <BrowserRouter>
 <Routes>
-  <Route path="/" element={<div>main page</div>}/>
+  <Route path="/" element={<First/>}/>
   <Route path="/allowed-voters" element={<AllowedVoters/>}/>
   <Route path="/voterList" element={<VoterList/>}/>
   <Route path="/allowed-candidate" element={<AllowedCandidate/>}/>

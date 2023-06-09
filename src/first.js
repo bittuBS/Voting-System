@@ -1,19 +1,25 @@
-import { useContext,useEffect } from 'react';
-import { VotingContext } from './Context/Voter';
+import  {useContext,useEffect } from 'react';
+import  {VotingContext}  from './Context/Voter';
 import Card from"./Components/Card/Card";
-import Style from "./App.css";
+import Style from "./first.module.css";
 import Countdown from "react-countdown";
 
-const Main = () => {
-    useEffect(()=>{
-        //checkIfWalletIsConnected();
-          });
+const First =()=> {
+    
 
     const {getNewCandidate, candidateArray,giveVote,checkIfWalletIsConnected,candidateLength,currentAccount,
-        voterLength}= useContext(VotingContext);
-    
+        voterLength,getAllVoterData}= useContext(VotingContext);
+ useEffect(()=>{
+          checkIfWalletIsConnected();
+          getAllVoterData();
+           },[]);
+
+
 return(
-<div className={Style.home}>{currentAccount &&(
+ 
+  
+ <div className={Style.home}>
+{currentAccount &&(
     <div className={Style.winner}>
       <div className={Style.winner_info}>
         <div className={Style.candidate_list}>
@@ -29,15 +35,18 @@ return(
       </div>
       <div className={Style.winner_message}>
         <small>
-          <Countdown date={Date.now()+100000}/>
+          <Countdown date={Date.now()+100000000}/>
         </small>
       </div>
     </div>
 
   )}
-  <Card candidateArray={candidateArray} giveVote={giveVote} />
+   <Card candidateArray={candidateArray} giveVote={giveVote} /> 
+  
   </div>
- 
+  
+
+  
 );
 }
-export default Main;
+export default First;

@@ -1,7 +1,7 @@
 import React from 'react'
 import {useEffect,useState,useContext,useCallback} from 'react';
 import{useDropzone} from "react-dropzone";
-
+import NavBar from './Components/NavBar/NavBar';
 /// ----internal import
 import { VotingContext } from './Context/Voter';
 import Style from "./allowedVoter.module.css";
@@ -36,6 +36,8 @@ useEffect(()=>{
 //------jsx part
 
   return (
+    <>
+    <NavBar/> 
     <div className={Style.createVoter} >
     <div>{fileUrl && (
       <div className={Style.voterInfo}>
@@ -114,7 +116,7 @@ useEffect(()=>{
 </div>
 
       </div>
-
+</>
   );
         };
 

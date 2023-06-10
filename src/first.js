@@ -3,6 +3,7 @@ import  {VotingContext}  from './Context/Voter';
 import Card from"./Components/Card/Card";
 import Style from "./first.module.css";
 import Countdown from "react-countdown";
+import NavBar from './Components/NavBar/NavBar';
 
 const First =()=> {
     
@@ -16,8 +17,8 @@ const First =()=> {
 
 
 return(
- 
-  
+ <>
+   <NavBar/> 
  <div className={Style.home}>
 {currentAccount &&(
     <div className={Style.winner}>
@@ -46,7 +47,7 @@ return(
   </div>
   
 
-  
+  </>
 );
 }
 export default First;

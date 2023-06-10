@@ -8,6 +8,7 @@ import Style from "./allowedVoter.module.css";
 import images from "./assets";
 import Button from "./Components/Button/Button";
 import Input from "./Components/Input/Input";
+import NavBar from './Components/NavBar/NavBar';
 
 const AllowedCandidate = () => {
 const [fileUrl, setFileUrl]=useState(null);
@@ -37,6 +38,8 @@ console.log(fileUrl);
 //------jsx part
 
   return (
+    <>
+    <NavBar/>
     <div className={Style.createVoter} >
     <div>{fileUrl && (
       <div className={Style.voterInfo}>
@@ -115,7 +118,7 @@ console.log(fileUrl);
 </div>
 
       </div>
-
+</>
   );
         };
 

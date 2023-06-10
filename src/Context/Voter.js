@@ -141,7 +141,18 @@ catch(error){
 // },[]);
 //-----------------give vote
 const giveVote = async(id)=>{
+   
     try{
+        
+        const voterAddress =id.address;
+        const voterId =id.id;
+        const web3modal =new Web3Modal();
+const connection =await web3modal.connect();
+const provider =new ethers.providers.Web3Provider(connection);
+const signer =provider.getSigner();
+const contract =fetchContract(signer);
+const voterList =await  contract.vote(voterAddress,voterId);
+console.log(voterList);
 
     }
     catch(error){
@@ -206,7 +217,7 @@ const getNewCandidate =async()=>{
    <VotingContext.Provider value={{title,checkIfWalletIsConnected,connectWallet,uploadToIPFS ,createVoter,
    getAllVoterData,giveVote,setCandidate,error,voterArray,voterLength,voterAddress,currentAccount,candidateLength,candidateArray,
    uploadToIPFSCandidate,
-   getNewCandidate}}>
+   getNewCandidate,error}}>
     {children}
    </VotingContext.Provider>
   )

@@ -67,7 +67,7 @@ console.log(fileUrl);
             <div className={Style.card_info}>
             <p>{el[1]} # {el[2].toNumber()}</p>
             <p>{el[0]}</p>
-            <p>Address: el[6].slice(0,10)..</p>
+            <p>Address: {el[6].slice(0,10)}..</p>
             </div>
             </div>
           ))} 
@@ -103,7 +103,7 @@ console.log(fileUrl);
       <Input  inputType="text" title="Address" placeholder=" Voter Address" handleClick={(e)=>setcandidateForm({...candidateForm,address:e.target.value})}/>
         <Input  inputType="text" title="Age" placeholder=" Voter Position" handleClick={(e)=>setcandidateForm({...candidateForm,age:e.target.value})}/>
 <div className={Style.Button}>
-  <Button btnName="Authorized candidate" handleClick={()=>setCandidate(candidateForm,fileUrl)}/>
+  <Button btnName="Authorized candidate" handleClick={(e)=>setCandidate(candidateForm,fileUrl,e)}/>
 </div>
       </div>
     </div>

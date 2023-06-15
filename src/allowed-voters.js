@@ -29,7 +29,7 @@ const {getRootProps, getInputProps}=useDropzone({
   accept: "image/*",
   maxSize : 5000000,
 });
-console.log(fileUrl);
+//console.log(fileUrl);
 useEffect(()=>{
   getAllVoterData();
 },[]);
@@ -43,9 +43,9 @@ useEffect(()=>{
       <div className={Style.voterInfo}>
     <img src={fileUrl} alt='voter image'></img>
     <div className={Style.voterInfo_paragraph}>
-      <p> Name: <span>&nbs;{formInput.name}</span> </p>
-      <p> Add: <span>&nbs;{formInput.address.slice(0,20)}</span> </p>
-      <p> Pos: <span>&nbs;{formInput.position}</span> </p>
+      <p> Name: <span>{formInput.name}</span> </p>
+      <p> Add: <span>{formInput.address.slice(0,20)}</span> </p>
+      <p> Pos: <span>{formInput.position}</span> </p>
     </div>
       </div>
     )}
@@ -60,7 +60,7 @@ useEffect(()=>{
            {voterArray.map((el,i)=>(
             <div key={i+1} className={Style.card_box}>
               <div className={Style.image}>
-              <img src={el[4]} alt='profile photo'></img>
+              <img src={el[2]} alt='profile photo'></img>
             </div>
             <div className={Style.card_info}>
             <p>Name:{el[1]}</p>
@@ -101,7 +101,7 @@ useEffect(()=>{
       <Input  inputType="text" title="Address" placeholder=" Voter Address" handleClick={(e)=>setFormInput({...formInput,address:e.target.value})}/>
         <Input  inputType="text" title="Position" placeholder=" Voter Position" handleClick={(e)=>setFormInput({...formInput,position:e.target.value})}/>
 <div className={Style.Button}>
-  <Button btnName="Authorized voter" handleClick={()=>createVoter(formInput,fileUrl)}/>
+  <Button btnName="Authorized voter" handleClick={(e)=>createVoter(formInput,fileUrl,e)}/>
 </div>
       </div>
     </div>

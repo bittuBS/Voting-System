@@ -1,26 +1,30 @@
 import React,{ useState,useEffect,createContext} from 'react';
+import FormData from 'form-data';
 import Web3Modal from "web3modal";
 import {ethers}from "ethers";
-import{create as ipfsHttpClient}from "ipfs-http-client";
+//import{create as ipfsHttpClient}from "ipfs-http-client";
 import axios from "axios";
 //import Hello from '../hello';
 import { BrowserRouter,Routes,Route, Link } from 'react-router-dom';
 //import App from '../App';
 //import AllowedVoters from '../allowed-voters';
+import voting from  './Create.json';
 
 // internal import
-import { VotingAddressABI,VotingAddress } from './constants';
-const client =ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
-const fetchContract =(SignerOrProvider)=>{
-    new ethers.Contract(VotingAddress,VotingAddressABI,SignerOrProvider);
-}
+//import { VotingAddressABI,VotingAddress} from './Constants';
+const VotingAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3" ;
+const VotingAddressABI = voting.abi;
+//console.log(VotingAddressABI);
+//const client =ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+const fetchContract =(singnerOrProvider)=>
+new ethers.Contract(VotingAddress,VotingAddressABI,singnerOrProvider);
     export const VotingContext = React.createContext();
     
 export const VotingProvider =({children})=>{
      const title="hello duniyan kya haal";
      //const router =BrowserRouter();
 
-     
+     console.log(VotingAddressABI);
 
 const [currentAccount, setCurrentAccount]=useState('');
 const [candidateLength, setCandidateLength] =useState('');
@@ -61,51 +65,126 @@ const connectWallet =async()=>{
 }
 
 //---------upload to the ipfs voter image.
+const uploadToIPFS= async(file,e)=>{
+   
+        if(file){
+            try{
+const formData = new FormData();
+formData.append("file",file);
+const resFile= await axios({
+   method:"post",
+   url:"https://api.pinata.cloud/pinning/pinFileToIPFS",
+   data: formData,
+   headers: {
+    pinata_api_key:`3761adbf53eba16a6d31`,
+    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    "Content-Type":"multipart/form-data",
 
-const uploadToIPFS =async(file)=>{
+   } ,
+});
+console.log(resFile);
+ const urls =`https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}` ;
+ console.log(urls);
+ return urls;
 
-try{
-    const added =await client.add({content: file})
-const url =`https://ipfs.infura.io/ipfs/${added.path}`;
-return url;
 }
 catch(error){
-    setError("error upload to file on ipfs");
+    console.error("error in upload in ipfs")
 }
-}
+        }
+    }
+
+////////////
+// const uploadToIPF =async(file)=>{
+
+// try{
+//     const added =await client.add({content: file})
+// const url =`https://ipfs.infura.io/ipfs/${added.path}`;
+// return url;
+// }
+// catch(error){
+//     setError("error upload to file on ipfs");
+// }
+// }
 //---------upload data of candidate on ipfs
 const uploadToIPFSCandidate =async(file)=>{
 
-    try{
-        const added =await client.add({content: file})
-    const url =`https://ipfs.infura.io/ipfs/${added.path}`;
-    return url;
-    }
-    catch(error){
+    
+        try{
+//e.preventDefault();
+        if(file){
+          
+const formData = new FormData();
+formData.append("file",file);
+const resFile= await axios({
+   method:"post",
+   url:"https://api.pinata.cloud/pinning/pinFileToIPFS",
+   data: formData,
+   headers: {
+    pinata_api_key:`3761adbf53eba16a6d31`,
+    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    "Content-Type":"multipart/form-data",
+
+   } ,
+});
+//const ImgHash =`ipfs://${resFile.data.IpfsHash}`;
+ 
+ const urls =`https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}` ;
+ return urls;
+
+}
+}
+catch(error){
         setError("error upload to file on ipfs");
     }
     }
+
 //---------create voter;
-const createVoter =async(formInput,fileUrl)=>{
+const createVoter =async(formInput,fileUrl,e)=>{
+    const {name,address,position}=formInput;
     try{
-        const {name,address,position}=formInput;
+        console.log(VotingAddressABI);
+        
+        console.log(name,address,position,fileUrl);
         if(!name || !address || !position)
         return setError("input data is missing");
         //connect smart contract 
-const web3modal =new Web3Modal();
-const connection =await web3modal.connect();
-const provider =new ethers.providers.Web3Provider(connection);
-const signer =provider.getSigner();
-const contract =fetchContract(signer);
-console.log("contract", contract);
-const data = JSON.stringify({name,address,position,image:fileUrl});
-const added = await client.add(data);
-const url =`https://ipfs.infura.io/ipfs/${added.path}`;
+        const web3Modal =new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider =new ethers.providers.Web3Provider(connection);
+        const signer =provider.getSigner();
+        const contract =fetchContract(signer);
+//console.log("contract address",contract)
+//console.log(VotingAddressABI);
+
+const datas = JSON.stringify({name,address,position,image:fileUrl});
+
+e.preventDefault();
+const formData = new FormData();
+formData.append("file",datas);
+const resFile= await axios({
+   method:"post",
+   url:"https://api.pinata.cloud/pinning/pinJSONToIPFS",
+   data: formData,
+   headers: {
+    pinata_api_key:`3761adbf53eba16a6d31`,
+    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    //"Content-Type":"multipart/form-data",
+    'Content-Type': 'application/json', 
+   } ,
+});
+//const ImgHash =`ipfs://${resFile.data.IpfsHash}`;
+//console.log(resFile);
+ 
+ const url =`https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}` ;
+
 console.log(url);
-const voter =await contract.voterRight(address,name,url,fileUrl);
+
+const voter = await contract.voterRight(address,name,fileUrl,url);
+console.log("it is the voter",voter);
 voter.await();
 //router voteralist side route
- <Link to="/voterList"></Link> 
+ //<Link to="/voterList"></Link> 
 
     }
     catch(error){
@@ -161,9 +240,10 @@ console.log(voterList);
 }
 
 //----------------candidate section
-const setCandidate =async(candidateForm,fileUrl)=>{
+const setCandidate =async(candidateForm,fileUrl,e)=>{
+    const {name,address,age}=candidateForm;
     try{
-        const {name,address,age}=candidateForm;
+        
         if(!name || !address || !age)
         return setError("input data is missing");
         //connect smart contract 
@@ -173,14 +253,35 @@ const provider =new ethers.providers.Web3Provider(connection);
 const signer =provider.getSigner();
 const contract =fetchContract(signer);
 console.log("contract", contract);
-const data = JSON.stringify({name,address,image:fileUrl,age});
-const added = await client.add(data);
-const ipfs =`https://ipfs.infura.io/ipfs/${added.path}`;
-console.log(ipfs);
+const data = JSON.stringify({name,address,age,image:fileUrl});
+////////
+const formData = new FormData();
+formData.append("file",data);
+const resFile= await axios({
+   method:"post",
+   url:"https://api.pinata.cloud/pinning/pinJSONToIPFS",
+   data: formData,
+   headers: {
+    pinata_api_key:`3761adbf53eba16a6d31`,
+    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    'Content-Type': 'application/json', 
+   } ,
+});
+//const ImgHash =`ipfs://${resFile.data.IpfsHash}`;
+ 
+ const ipfs =`https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}` ;
+
+
+// const added = await client.add(data);
+// const ipfs =`https://ipfs.infura.io/ipfs/${added.path}`;
+
+
+console.log("ipfs data",ipfs);
 const candidate =await contract.setCandidate(address,age,name,fileUrl,ipfs);
+console.log("candidate s")
 candidate.await();
 //router voteralist side route
- <Link to="/"></Link> 
+ //<Link to="/"></Link> 
 
     }
     catch(error){
@@ -197,7 +298,7 @@ const getNewCandidate =async()=>{
         const contract =fetchContract(signer);
         //-----------------all candidate data
         const allCandidatedata = await contract.getCandidate();
-        console.log(allCandidatedata);
+        console.log("get all condidate ",allCandidatedata);
         allCandidatedata.map(async(el)=>{
             const singleCandidateData = await contract.getCandidatedata(el);
             pushCandidate.push(singleCandidateData);
@@ -222,8 +323,3 @@ const getNewCandidate =async()=>{
    </VotingContext.Provider>
   )
   };
-   
-
-
-
-

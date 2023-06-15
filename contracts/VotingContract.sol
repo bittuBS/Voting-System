@@ -67,19 +67,20 @@ contract Create{
     votingOrganizer= msg.sender;
  }
 function setCandidate(address _address , string memory _age, string memory _name, string memory _image, string memory _ipfs) public {
-    require( votingOrganizer ==msg.sender,"only organizer can create the candidate");
+    require( votingOrganizer == msg.sender,"only organizer can create the candidate");
     _candidateId.increment();
-    uint256 idNumber =_candidateId.current();
+    uint256 idNumber = _candidateId.current();
   Candidate storage candidate = candidates[_address];
- candidate.age =_age;
-   candidate.candidateId =idNumber;
-   candidate.image =_image;
-   candidate.name =_name;
-   candidate.voteCount =0;
-   candidate._address =_address;
-   candidate.ipfs =_ipfs;
+ candidate.age = _age;
+   candidate.candidateId = idNumber;
+   candidate.image = _image;
+   candidate.name = _name;
+   candidate.voteCount = 0;
+   candidate._address = _address;
+   candidate.ipfs = _ipfs;
    candidateAddress.push(_address);
-emit CandidateCreate(idNumber,
+emit CandidateCreate(
+    idNumber,
  _age,
   _name,
    _image,

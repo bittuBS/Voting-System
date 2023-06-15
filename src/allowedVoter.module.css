@@ -1,6 +1,4 @@
-*{
 
-}
 .createVoter{
     width: 95%;
     margin: 0 auto;
@@ -82,6 +80,7 @@ image img{
 }
 
 /* /////user list */
+
 .createdVoter__info{
     background-color:#231E39;
     border-radius:25px;

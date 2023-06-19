@@ -2,29 +2,25 @@ import React,{ useState,useEffect,createContext} from 'react';
 import FormData from 'form-data';
 import Web3Modal from "web3modal";
 import {ethers}from "ethers";
-//import{create as ipfsHttpClient}from "ipfs-http-client";
 import axios from "axios";
-//import Hello from '../hello';
-import { BrowserRouter,Routes,Route, Link } from 'react-router-dom';
-//import App from '../App';
+import {  Link ,Navigate} from 'react-router-dom';
 //import AllowedVoters from '../allowed-voters';
 import voting from  './Create.json';
-
 // internal import
 //import { VotingAddressABI,VotingAddress} from './Constants';
 const VotingAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3" ;
 const VotingAddressABI = voting.abi;
-//console.log(VotingAddressABI);
+
 //const client =ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+
 const fetchContract =(singnerOrProvider)=>
 new ethers.Contract(VotingAddress,VotingAddressABI,singnerOrProvider);
     export const VotingContext = React.createContext();
-    
 export const VotingProvider =({children})=>{
      const title="hello duniyan kya haal";
      //const router =BrowserRouter();
-
-     console.log(VotingAddressABI);
+     //const navigate = useNavigate();
+ console.log(VotingAddressABI);
 
 const [currentAccount, setCurrentAccount]=useState('');
 const [candidateLength, setCandidateLength] =useState('');
@@ -76,8 +72,8 @@ const resFile= await axios({
    url:"https://api.pinata.cloud/pinning/pinFileToIPFS",
    data: formData,
    headers: {
-    pinata_api_key:`3761adbf53eba16a6d31`,
-    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    pinata_api_key:`1deaf4b3c82fa108fec0`,
+    pinata_secret_api_key:`ea6d2df3b3b39b076483a3727124750ae6d9b94fde6eccd531f198f57f3f8c38`,
     "Content-Type":"multipart/form-data",
 
    } ,
@@ -108,12 +104,9 @@ catch(error){
 // }
 //---------upload data of candidate on ipfs
 const uploadToIPFSCandidate =async(file)=>{
-
-    
-        try{
+ try{
 //e.preventDefault();
-        if(file){
-          
+        if(file){     
 const formData = new FormData();
 formData.append("file",file);
 const resFile= await axios({
@@ -121,17 +114,15 @@ const resFile= await axios({
    url:"https://api.pinata.cloud/pinning/pinFileToIPFS",
    data: formData,
    headers: {
-    pinata_api_key:`3761adbf53eba16a6d31`,
-    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    pinata_api_key:`1deaf4b3c82fa108fec0`,
+    pinata_secret_api_key:`ea6d2df3b3b39b076483a3727124750ae6d9b94fde6eccd531f198f57f3f8c38`,
     "Content-Type":"multipart/form-data",
-
    } ,
 });
 //const ImgHash =`ipfs://${resFile.data.IpfsHash}`;
  
  const urls =`https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}` ;
  return urls;
-
 }
 }
 catch(error){
@@ -167,8 +158,8 @@ const resFile= await axios({
    url:"https://api.pinata.cloud/pinning/pinJSONToIPFS",
    data: formData,
    headers: {
-    pinata_api_key:`3761adbf53eba16a6d31`,
-    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    pinata_api_key:`1deaf4b3c82fa108fec0`,
+    pinata_secret_api_key:`ea6d2df3b3b39b076483a3727124750ae6d9b94fde6eccd531f198f57f3f8c38`,
     //"Content-Type":"multipart/form-data",
     'Content-Type': 'application/json', 
    } ,
@@ -185,7 +176,9 @@ console.log("it is the voter",voter);
 voter.await();
 //router voteralist side route
  //<Link to="/voterList"></Link> 
-
+//<Redirect to="/voterList"></Redirect>
+<Navigate to='/voterList'></Navigate>
+//navigate ('/voterList');
     }
     catch(error){
         setError("error in creating voter");
@@ -222,6 +215,7 @@ catch(error){
 const giveVote = async(id)=>{
    
     try{
+       
         
         const voterAddress =id.address;
         const voterId =id.id;
@@ -242,6 +236,7 @@ console.log(voterList);
 //----------------candidate section
 const setCandidate =async(candidateForm,fileUrl,e)=>{
     const {name,address,age}=candidateForm;
+    console.log(name,address,age);
     try{
         
         if(!name || !address || !age)
@@ -262,8 +257,8 @@ const resFile= await axios({
    url:"https://api.pinata.cloud/pinning/pinJSONToIPFS",
    data: formData,
    headers: {
-    pinata_api_key:`3761adbf53eba16a6d31`,
-    pinata_secret_api_key:`c3e64ff434b1983098441a43d89e4671dd845134c987b4db32046bf359668dde`,
+    pinata_api_key:`1deaf4b3c82fa108fec0`,
+    pinata_secret_api_key:`ea6d2df3b3b39b076483a3727124750ae6d9b94fde6eccd531f198f57f3f8c38`,
     'Content-Type': 'application/json', 
    } ,
 });
@@ -278,10 +273,11 @@ const resFile= await axios({
 
 console.log("ipfs data",ipfs);
 const candidate =await contract.setCandidate(address,age,name,fileUrl,ipfs);
-console.log("candidate s")
+console.log("candidate s",candidate);
 candidate.await();
-//router voteralist side route
- //<Link to="/"></Link> 
+/////router voteralist side route
+<Navigate to='/'></Navigate>
+//<Link to="/"></Link> 
 
     }
     catch(error){

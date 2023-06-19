@@ -73,6 +73,12 @@
     padding: .2rem;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
     border-radius:.3rem;
+    
+    
+}
+.card_box img{
+width: 200px;
+height: 200px;
 }
 image img{
     width:100%;
